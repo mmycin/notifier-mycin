@@ -1,21 +1,21 @@
-# Notify Toast
+# Notifier Mycin: A Simple Notification Library
 
-`notify-toast` is a lightweight and customizable notification toast library built using [Toastify-js](https://github.com/apvarun/toastify-js). It allows you to easily display success or error notifications with customizable positions, durations, and click handlers.
+`notifier-mycin` is a lightweight and customizable notification toast library built using [Toastify-js](https://github.com/apvarun/toastify-js). It allows you to easily display success or error notifications with customizable positions, durations, and click handlers.
 
 ---
 
 ## Installation
 
-You can install `notify-toast` via npm:
+You can install `notifier-mycin` via npm:
 
 ```bash
-npm install notify-toast
+npm install notifier-mycin
 ```
 
 Or via yarn:
 
 ```bash
-yarn add notify-toast
+yarn add notifier-mycin
 ```
 
 ---
@@ -27,8 +27,7 @@ yarn add notify-toast
 First, import the `Notify` function and the required CSS file into your project:
 
 ```typescript
-import Notify from 'notify-toast';
-import "toastify-js/src/toastify.css";
+import Notify from 'nnotifier-mycin';
 ```
 
 ### Displaying a Toast
@@ -116,4 +115,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ---
 
-Enjoy using `notify-toast`! If you have any questions or feedback, feel free to open an issue on GitHub.
+Enjoy using `notifier-mycin`! If you have any questions or feedback, feel free to open an issue on GitHub.
