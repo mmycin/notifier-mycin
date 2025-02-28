@@ -1,0 +1,49 @@
+{
+  "name": "notifier-mycin",
+  "version": "1.0.0",
+  "description": "A lightweight and customizable notification toast library built with Toastify-js.",
+  "main": "dist/notify.js",
+  "module": "notify.ts",
+  "type": "module",
+  "types": "dist/notify.d.ts",
+  "scripts": {
+    "build": "bun run tsc",
+    "prepare": "bun run build",
+    "start": "bun run notify.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "toast",
+    "notification",
+    "alert",
+    "ui",
+    "notifier",
+    "toastify",
+    "bun"
+  ],
+  "author": "Tahcin Ul Karim (Mycin)",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@types/toastify-js": "^1.12.3",
+    "toastify-js": "^1.12.0"
+  },
+  "files": [
+    "dist",
+    "notify.ts"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mmycin/notifier-mycin.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mmycin/notifier-mycin/issues"
+  },
+  "homepage": "https://github.com/mmycin/notifier-mycin#readme"
+}
