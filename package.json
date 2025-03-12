@@ -1,16 +1,21 @@
 {
   "name": "notifier-mycin",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A lightweight and customizable notification toast library built with Toastify-js.",
-  "main": "dist/notify.js",
-  "module": "notify.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "type": "module",
-  "types": "dist/notify.d.ts",
   "scripts": {
-    "build": "bun run tsc",
+    "build": "bun run build:clean && bun run build:js && bun run build:types",
+    "build:clean": "rm -rf dist",
+    "build:js": "bun build ./src/index.ts --outdir ./dist --target browser --format esm",
+    "build:types": "tsc --emitDeclarationOnly --outDir dist",
     "prepare": "bun run build",
-    "start": "bun run notify.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "bun run src/index.ts",
+    "test": "bun test",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write \"src/**/*.ts\""
   },
   "keywords": [
     "toast",
@@ -19,16 +24,29 @@
     "ui",
     "notifier",
     "toastify",
-    "bun"
+    "bun",
+    "react",
+    "hooks"
   ],
   "author": "Tahcin Ul Karim (Mycin)",
   "license": "MIT",
   "devDependencies": {
     "@types/bun": "latest",
+    "@types/react": "^18.2.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0",
     "typescript": "^5.0.0"
   },
   "peerDependencies": {
+    "react": ">=16.8.0",
     "typescript": "^5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
   },
   "dependencies": {
     "@types/toastify-js": "^1.12.3",
@@ -36,7 +54,9 @@
   },
   "files": [
     "dist",
-    "notify.ts"
+    "src",
+    "README.md",
+    "LICENSE"
   ],
   "repository": {
     "type": "git",

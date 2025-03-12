@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    // Enable latest features
+    // Target latest browsers
     "lib": ["ESNext", "DOM"],
     "target": "ESNext",
     "module": "ESNext",
@@ -8,20 +8,41 @@
     "jsx": "react-jsx",
     "allowJs": true,
 
-    // Bundler mode
+    // Module resolution
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
+    "emitDeclarationOnly": true,
     "verbatimModuleSyntax": true,
-    "noEmit": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
 
-    // Best practices
+    // Type checking
     "strict": true,
-    "skipLibCheck": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "useUnknownInCatchVariables": true,
+    "alwaysStrict": true,
     "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
 
-    // Some stricter flags (disabled by default)
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noPropertyAccessFromIndexSignature": false
-  }
+    // Emit
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "dist",
+    "removeComments": false,
+
+    // Advanced
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "tests"]
 }
