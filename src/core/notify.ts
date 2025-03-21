@@ -74,45 +74,9 @@ const createToast = (options: NotifyOptions): NotifyInstance => {
     messageContent = escapeHtml(messageContent);
   }
   
-  // Create custom HTML if needed
-  let customHtml: string | undefined;
-  if (mergedOptions.icon || mergedOptions.closeButton) {
-    let iconHtml = '';
-    let closeButtonHtml = '';
-    
-    if (mergedOptions.icon) {
-      if (typeof mergedOptions.icon === 'string') {
-        iconHtml = `<span class="notifier-mycin-icon">${mergedOptions.icon}</span>`;
-      } else {
-        // Default icons based on type
-        const iconMap: Record<string, string> = {
-          success: '✓',
-          error: '✕',
-          warning: '⚠',
-          info: 'ℹ',
-          custom: '•'
-        };
-        iconHtml = `<span class="notifier-mycin-icon">${iconMap[mergedOptions.type || 'success']}</span>`;
-      }
-    }
-    
-    if (mergedOptions.closeButton) {
-      closeButtonHtml = `<span class="notifier-mycin-close">×</span>`;
-    }
-    
-    customHtml = `
-      <div class="notifier-mycin-content">
-        ${iconHtml}
-        <span class="notifier-mycin-message">${messageContent}</span>
-        ${closeButtonHtml}
-      </div>
-      ${mergedOptions.progressBar ? '<div class="notifier-mycin-progress"></div>' : ''}
-    `;
-  }
-  
   // Create Toastify options
   const toastifyOptions: any = {
-    text: customHtml || messageContent,
+    text: messageContent,
     duration: mergedOptions.duration,
     gravity: mergedOptions.position?.y,
     position: mergedOptions.position?.x,
@@ -124,7 +88,7 @@ const createToast = (options: NotifyOptions): NotifyInstance => {
     selector: container,
     stopOnFocus: mergedOptions.pauseOnHover,
     onClick: mergedOptions.onClick,
-    close: !customHtml && mergedOptions.closeButton,
+    close: false, // No close button
     destination: undefined,
     newWindow: false,
     node: mergedOptions.customContent
@@ -133,67 +97,28 @@ const createToast = (options: NotifyOptions): NotifyInstance => {
   // Create toast
   const toast = Toastify(toastifyOptions);
   
-  // Add animation
-  if (animationIn.animation && toast.toastElement) {
+  // Show toast
+  toast.showToast();
+  
+  // Add animation if needed
+  if (toast.toastElement && animationIn.animation) {
     const element = toast.toastElement as HTMLElement;
     element.style.animation = animationIn.animation;
+    
+    // Make toast elements clickable
+    element.style.pointerEvents = 'auto';
+    
+    // Add hover event if needed
+    if (mergedOptions.onHover) {
+      element.addEventListener('mouseenter', mergedOptions.onHover);
+    }
   }
   
-  // Store the instance
+  // Create the instance
   const instance: NotifyInstance = {
     showToast: () => {
-      toast.showToast();
-      
-      // Add progress bar animation if needed
-      if (mergedOptions.progressBar && mergedOptions.duration && mergedOptions.duration > 0 && toast.toastElement) {
-        const progressBar = toast.toastElement.querySelector('.notifier-mycin-progress');
-        if (progressBar) {
-          progressBar.animate(
-            [
-              { width: '100%' },
-              { width: '0%' }
-            ],
-            {
-              duration: mergedOptions.duration,
-              fill: 'forwards',
-              easing: 'linear'
-            }
-          );
-        }
-      }
-      
-      // Add close button event listener
-      if (toast.toastElement) {
-        const closeButton = toast.toastElement.querySelector('.notifier-mycin-close');
-        if (closeButton) {
-          closeButton.addEventListener('click', (e) => {
-            e.stopPropagation();
-            instance.hideToast();
-            if (mergedOptions.onClose) mergedOptions.onClose();
-          });
-        }
-        
-        // Add hover event
-        if (mergedOptions.onHover) {
-          toast.toastElement.addEventListener('mouseenter', mergedOptions.onHover);
-        }
-        
-        // Make toast elements clickable
-        const element = toast.toastElement as HTMLElement;
-        element.style.pointerEvents = 'auto';
-      }
-      
-      // Add to active toasts
-      activeToasts.set(id, instance);
-      
-      // Set timeout to remove from active toasts
-      if (mergedOptions.duration && mergedOptions.duration > 0) {
-        setTimeout(() => {
-          activeToasts.delete(id);
-          // Process next toast in queue
-          processQueue();
-          if (mergedOptions.onClose) mergedOptions.onClose();
-        }, mergedOptions.duration);
+      if (!toast.toastElement) {
+        toast.showToast();
       }
     },
     hideToast: () => {
@@ -233,12 +158,7 @@ const createToast = (options: NotifyOptions): NotifyInstance => {
       
       // Update message if provided
       if (newOptions.message) {
-        const messageElement = toast.toastElement.querySelector('.notifier-mycin-message');
-        if (messageElement) {
-          messageElement.textContent = newOptions.message;
-        } else {
-          toast.toastElement.textContent = newOptions.message;
-        }
+        toast.toastElement.textContent = newOptions.message;
       }
       
       // Update styles if provided
@@ -249,44 +169,30 @@ const createToast = (options: NotifyOptions): NotifyInstance => {
       
       // Update duration if provided
       if (newOptions.duration && newOptions.duration > 0) {
-        // Reset timeout
-        toast.hideToast();
+        // Set new timeout
         setTimeout(() => {
-          toast.showToast();
-          
-          // Update progress bar
-          if (mergedOptions.progressBar && toast.toastElement) {
-            const progressBar = toast.toastElement.querySelector('.notifier-mycin-progress');
-            if (progressBar) {
-              progressBar.animate(
-                [
-                  { width: '100%' },
-                  { width: '0%' }
-                ],
-                {
-                  duration: newOptions.duration,
-                  fill: 'forwards',
-                  easing: 'linear'
-                }
-              );
-            }
-          }
-          
-          // Set new timeout
-          setTimeout(() => {
-            activeToasts.delete(id);
-            // Process next toast in queue
-            processQueue();
-            if (mergedOptions.onClose) mergedOptions.onClose();
-          }, newOptions.duration);
-        }, 100);
+          activeToasts.delete(id);
+          instance.hideToast();
+          if (mergedOptions.onClose) mergedOptions.onClose();
+        }, newOptions.duration);
       }
     },
     id
   };
   
-  // Show toast
-  instance.showToast();
+  // Add to active toasts
+  activeToasts.set(id, instance);
+  
+  // Set timeout to remove from active toasts
+  if (mergedOptions.duration && mergedOptions.duration > 0) {
+    setTimeout(() => {
+      activeToasts.delete(id);
+      instance.hideToast();
+      // Process next toast in queue
+      processQueue();
+      if (mergedOptions.onClose) mergedOptions.onClose();
+    }, mergedOptions.duration);
+  }
   
   return instance;
 };

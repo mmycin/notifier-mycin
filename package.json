@@ -1,10 +1,17 @@
 {
   "name": "notifier-mycin",
-  "version": "2.0.0",
+  "version": "2.0.4",
   "description": "A lightweight and customizable notification toast library built with Toastify-js.",
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "type": "module",
   "scripts": {
     "build": "bun run build:clean && bun run build:js && bun run build:types",
@@ -50,6 +57,7 @@
   },
   "dependencies": {
     "@types/toastify-js": "^1.12.3",
+    "notifier-mycin": "^2.0.1",
     "toastify-js": "^1.12.0"
   },
   "files": [
