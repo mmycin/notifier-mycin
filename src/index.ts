@@ -1,6 +1,6 @@
 import Notify from './core/notify';
 import type { NotifyOptions, NotifyInstance, NotifyManager, NotifyType, NotifyPosition, NotifyAnimation, NotifyTheme, NotifyStyle } from './core/types';
-import { useNotify, useNotifyQueue } from './hooks';
+// import { useNotify, useNotifyQueue } from './hooks';
 
 // Export the main Notify function as default
 export default Notify;
@@ -17,11 +17,11 @@ export type {
   NotifyStyle
 };
 
-// Export hooks for React
-export {
-  useNotify,
-  useNotifyQueue
-};
+// // Export hooks for React
+// export {
+//   useNotify,
+//   useNotifyQueue
+// };
 
 // Export a simple function for basic usage
 export const notify = (message: string, options?: Partial<NotifyOptions>): NotifyInstance => {
